@@ -138,36 +138,46 @@ class TimetableViewModel : ViewModel() {
     }
 
     private suspend fun fetchTimetableInternal(date: LocalDate, forceRefresh: Boolean = false) {
+        val resource = _currentResource.value
+
+        if (!forceRefresh) {
+            val cachedEvents = repository.getCachedTimetable(resource.id, date)
+            if (cachedEvents.isNotEmpty()) {
+                processEvents(date, cachedEvents)
+            }
+        }
+
         try {
-            val resource = _currentResource.value
-
-
-            val rawEvents = repository.fetchTimetable(
+            val networkEvents = repository.fetchTimetable(
                 resourceId = resource.id,
                 resourceType = resource.type,
                 date = date,
                 forceRefresh = forceRefresh
             )
-            val eventsByDay = rawEvents.groupBy {
-                LocalDate.parse(it.start.substring(0, 10))
-            }
 
-            eventsByDay.forEach { (day, dayEvents) ->
-                val positioned = EventLayoutEngine.calculatePositions(dayEvents.sortedBy { it.start })
-                eventsCache[day] = positioned
-            }
-
-            if (!eventsByDay.containsKey(date)) {
-                eventsCache[date] = emptyList()
-            }
-
-            updateKownSubjects(rawEvents)
-
-            _cacheVersion.value += 1
+            processEvents(date, networkEvents)
+            updateKownSubjects(networkEvents)
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun processEvents(requestDate: LocalDate, rawEvents: List<CourseEvent>) {
+        val eventsByDay = rawEvents.groupBy {
+            LocalDate.parse(it.start.substring(0, 10))
+        }
+
+        eventsByDay.forEach { (day, dayEvents) ->
+            val positioned = EventLayoutEngine.calculatePositions(dayEvents.sortedBy { it.start })
+            eventsCache[day] = positioned
+        }
+
+        if (!eventsByDay.containsKey(requestDate)) {
+            eventsCache[requestDate] = emptyList()
+        }
+
+        _cacheVersion.value += 1
     }
 
     private fun updateKownSubjects(events: List<CourseEvent>) {

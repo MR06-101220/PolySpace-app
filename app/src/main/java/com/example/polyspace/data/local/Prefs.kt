@@ -59,4 +59,21 @@ object Prefs {
     fun clear() {
         prefs.edit().clear().apply()
     }
+
+
+    fun saveTimetableCache(resourceId: String, date: String, json: String) {
+        prefs.edit().putString("cache_edt_${resourceId}_$date", json).apply()
+    }
+
+    fun getTimetableCache(resourceId: String, date: String): String? {
+        return prefs.getString("cache_edt_${resourceId}_$date", null)
+    }
+
+    fun clearTimetableCache() {
+        val editor = prefs.edit()
+        prefs.all.keys.filter { it.startsWith("cache_edt_") }.forEach {
+            editor.remove(it)
+        }
+        editor.apply()
+    }
 }

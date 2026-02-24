@@ -28,6 +28,7 @@ import com.example.polyspace.ui.features.settings.components.ProfileHeaderCard
 import com.example.polyspace.ui.features.settings.components.SettingsSectionTitle
 import com.example.polyspace.ui.features.settings.components.SettingsTile
 import com.example.polyspace.ui.features.timetable.TimetableViewModel
+import com.example.polyspace.utils.clearAllAppCache
 import com.example.polyspace.utils.clearGradesCacheOnly
 import com.example.polyspace.utils.clearGradesData
 import kotlinx.coroutines.launch
@@ -107,14 +108,15 @@ fun SettingsScreen(
 
             SettingsTile(
                 icon = Icons.Default.CleaningServices,
-                title = "Vider le cache des notes",
-                subtitle = "Si l'affichage des notes bugge",
+                title = "Vider le cache de l'application",
+                subtitle = "Résout les bugs d'affichage (Notes & Emploi du temps)",
                 onClick = {
-                    clearGradesCacheOnly(context)
+                    clearAllAppCache(context)
 
                     viewModel.viewModelScope.launch {
                         GlobalEvents.clearGradesCacheEvent.emit(Unit)
                     }
+                    viewModel.manualRefresh()
 
                     Toast.makeText(context, "Cache vidé !", Toast.LENGTH_SHORT).show()
                 }
