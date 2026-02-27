@@ -20,7 +20,7 @@ android {
         minSdk = 28
         targetSdk = 36
         versionCode = 2
-        versionName = "2.7.3"
+        versionName = "2.8.5"
 
         val properties = Properties()
         val propertiesFile = project.rootProject.file("local.properties")
@@ -88,11 +88,13 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
-    implementation("org.jsoup:jsoup:1.17.2") // Pour parser le HTML comme un chef
-    implementation("com.squareup.okhttp3:okhttp:4.12.0") // Pour se connecter au site
+    implementation("org.jsoup:jsoup:1.17.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.media:media:1.6.0")
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
 }
 

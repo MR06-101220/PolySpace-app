@@ -32,7 +32,6 @@ class TimetableRepository {
     ): List<CourseEvent> = withContext(Dispatchers.IO) {
         val dateString = date.toString()
 
-
         val networkEvents = if (resourceType == "PROMO") {
             NetworkModule.api.getTimetableByPromo(
                 promoName = resourceId,

@@ -124,7 +124,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            "v2.7.3",
+                            "v2.8.5",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.secondary
                         )

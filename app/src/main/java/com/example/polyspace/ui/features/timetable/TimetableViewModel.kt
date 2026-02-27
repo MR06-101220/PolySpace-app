@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import androidx.glance.appwidget.updateAll
+import com.example.polyspace.widget.TimetableWidget
+import android.content.Context
 
 class TimetableViewModel : ViewModel() {
 
@@ -229,5 +232,16 @@ class TimetableViewModel : ViewModel() {
     private val _daysToShow = MutableStateFlow(1)
     val daysToShow: StateFlow<Int> = _daysToShow
     fun setDaysToShow(days: Int) { _daysToShow.value = days }
+
+
+    fun updateWidget(context: Context) {
+        viewModelScope.launch {
+            try {
+                TimetableWidget().updateAll(context)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }
 

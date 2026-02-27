@@ -76,4 +76,15 @@ object Prefs {
         }
         editor.apply()
     }
+
+    private const val KEY_LIVE_ACTIVITIES = "live_activities_enabled"
+
+    fun isLiveActivitiesEnabled(): Boolean {
+        return prefs.getBoolean(KEY_LIVE_ACTIVITIES, true)
+    }
+
+    fun setLiveActivitiesEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_LIVE_ACTIVITIES, enabled).apply()
+    }
+
 }

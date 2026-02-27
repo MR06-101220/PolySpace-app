@@ -1,6 +1,8 @@
 package com.example.polyspace.ui.screens
 
+import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,15 +11,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.viewModelScope
+import com.example.polyspace.MainActivity
 import com.example.polyspace.core.GlobalEvents
 import com.example.polyspace.data.local.Prefs
 import com.example.polyspace.ui.features.settings.components.AboutDialog
@@ -31,7 +38,11 @@ import com.example.polyspace.ui.features.timetable.TimetableViewModel
 import com.example.polyspace.utils.clearAllAppCache
 import com.example.polyspace.utils.clearGradesCacheOnly
 import com.example.polyspace.utils.clearGradesData
+import com.example.polyspace.widget.TimetableWidget
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,12 +95,88 @@ fun SettingsScreen(
             SettingsTile(
                 icon = Icons.Outlined.Info,
                 title = "À propos",
-                subtitle = "Version 2.7.3 • Développé par MR06",
+                subtitle = "Version 2.8.5 • Développé par MR06",
                 onClick = { showAboutDialog = true }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            SettingsSectionTitle("Widget")
+
+            val context = LocalContext.current
+            val coroutineScope = rememberCoroutineScope()
+
+            var isLiveActivitiesEnabled by remember {
+                mutableStateOf(Prefs.isLiveActivitiesEnabled())
+            }
+
+            Surface(
+                onClick = {
+                    val newValue = !isLiveActivitiesEnabled
+                    isLiveActivitiesEnabled = newValue
+                    Prefs.setLiveActivitiesEnabled(newValue)
+
+                    coroutineScope.launch {
+                        delay(300)
+                        val intent = Intent(context, com.example.polyspace.MainActivity::class.java).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        }
+                        context.startActivity(intent)
+                        Runtime.getRuntime().exit(0)
+                    }
+                },
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.NotificationsActive,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Cours",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Afficher/Cacher les widgets",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "(Attention : L'application va redémarrer)",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(top = 2.dp)
+                        )
+                    }
+                    Switch(
+                        checked = isLiveActivitiesEnabled,
+                        onCheckedChange = {
+                            isLiveActivitiesEnabled = it
+                            Prefs.setLiveActivitiesEnabled(it)
+
+                            coroutineScope.launch {
+                                delay(300)
+                                val intent = Intent(context, MainActivity::class.java).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                }
+                                context.startActivity(intent)
+                                Runtime.getRuntime().exit(0)
+                            }
+                        }
+                    )
+                }
+            }
 
             SettingsSectionTitle("Personnalisation")
 

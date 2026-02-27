@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.polyspace.data.models.CourseEvent
 import com.example.polyspace.ui.features.timetable.TimetableConfig
@@ -45,6 +46,7 @@ fun InfiniteTimetableScreen(
 ) {
     val scope = rememberCoroutineScope()
     val configuration = LocalConfiguration.current
+    val context = LocalContext.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     var hourHeight by remember { mutableStateOf(52.dp) }
     var isZooming by remember { mutableStateOf(false) }
@@ -78,6 +80,11 @@ fun InfiniteTimetableScreen(
     }
     val snapBehavior = rememberSnapFlingBehavior(snapLayoutInfoProvider = snapLayoutInfoProvider)
     val cacheVersion by viewModel.cacheVersion.collectAsState()
+
+    LaunchedEffect(cacheVersion) {
+        viewModel.updateWidget(context)
+    }
+
     val currentResource by viewModel.currentResource.collectAsState()
     var targetDaysVisible by remember { mutableFloatStateOf(1f) }
     val animatedDaysVisible by animateFloatAsState(
