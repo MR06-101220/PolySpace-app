@@ -56,6 +56,6 @@ PolySpace is built with modern Android standards to ensure maintainability and p
 PolySpace is an independent, student-led project. It is **not affiliated with, endorsed by, or supported by any academic institution** or the developers of the Oasis portal.
 
 * **Data Privacy:** All scraped data, credentials, and homework are stored **locally** on your device's Room database. No personal data is ever sent to external servers.
-* **API:** Timetable data is powered by the custom API developed by [lekawik](https://github.com/lekawik).
+* **API:** Timetable data is powered by the custom API developed by [lekawik](https://github.com/lekawik/PolyAppApi).
 * **Scraping & Maintenance:** The grading module uses HTML parsing to fetch data from the Oasis portal. As this is not an official API, this feature may break or require updates if the portal's structure changes.
 * **Educational Purpose:** This application is intended for personal and educational use only. Users are responsible for complying with their institution's Terms of Service regarding automated access to portal data.
