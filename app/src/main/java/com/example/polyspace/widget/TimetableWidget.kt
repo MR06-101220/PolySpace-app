@@ -117,7 +117,7 @@ class TimetableWidget : GlanceAppWidget() {
         ) {
             if (data == null) {
                 Text(
-                    text = "Aucun cours",
+                    text = " ",
                     style = TextStyle(
                         color = baseColor,
                         fontWeight = FontWeight.Medium,

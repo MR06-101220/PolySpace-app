@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.example.polyspace.ui.features.timetable.TimetableConfig
 import com.example.polyspace.ui.features.timetable.TimetableViewModel
 import com.example.polyspace.utils.TimetableCalculations
 import java.time.LocalDate
+
 
 @Composable
 fun DayCompleteColumn(
@@ -34,7 +36,8 @@ fun DayCompleteColumn(
     hourHeight: Dp,
     totalContentHeight: Dp,
     isScrollEnabled: Boolean,
-    isTodayVisible: Boolean
+    isTodayVisible: Boolean,
+    courseIcons : Map<String, ImageVector>
 ) {
     LaunchedEffect(date) { viewModel.ensureDateLoaded(date) }
     val positionedEvents = viewModel.getEventsForDate(date)
@@ -102,6 +105,7 @@ fun DayCompleteColumn(
                                             compactMode = compactMode,
                                             badgeCount = badgeCount,
                                             hourHeight = hourHeight,
+                                            courseIcon = courseIcons[positionedEvent.event.title],
                                             onClick = {
                                                 viewModel.onEventSelected(positionedEvent.event)
                                                 onCourseClick(positionedEvent.event)

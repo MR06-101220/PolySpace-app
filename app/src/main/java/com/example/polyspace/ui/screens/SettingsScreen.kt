@@ -95,7 +95,7 @@ fun SettingsScreen(
             SettingsTile(
                 icon = Icons.Outlined.Info,
                 title = "À propos",
-                subtitle = "Version 2.8.5 • Développé par MR06",
+                subtitle = "Version 2.8.7 • Développé par MR06",
                 onClick = { showAboutDialog = true }
             )
 
@@ -199,6 +199,7 @@ fun SettingsScreen(
                 subtitle = "Résout les bugs d'affichage (Notes & Emploi du temps)",
                 onClick = {
                     clearAllAppCache(context)
+                    Prefs.clearSymbolCache()
 
                     viewModel.viewModelScope.launch {
                         GlobalEvents.clearGradesCacheEvent.emit(Unit)

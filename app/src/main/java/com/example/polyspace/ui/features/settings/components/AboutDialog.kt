@@ -124,7 +124,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            "v2.8.5",
+                            "v2.8.7",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.secondary
                         )
@@ -142,7 +142,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
 
                         Surface(
                             onClick = {
-                                uriHandler.openUri("https://ssamama.com")
+                                uriHandler.openUri("https://github.com/lekawik/PolyAppApi")
                             },
                             color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f),
                             shape = RoundedCornerShape(12.dp),

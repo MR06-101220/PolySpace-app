@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector // 🚀 Import ajouté
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -27,6 +28,7 @@ fun GridCourseCard(
     compactMode: Boolean,
     badgeCount: Int = 0,
     hourHeight: Dp,
+    courseIcon: ImageVector?,
     onClick: () -> Unit
 ) {
     val rawColor = parseColorSafe(event.colorHex) ?: MaterialTheme.colorScheme.primary
@@ -76,17 +78,32 @@ fun GridCourseCard(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = event.title ?: "Cours",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = if (isZoomedOut) 1 else 3,
-                            overflow = TextOverflow.Ellipsis,
-                            fontSize = titleSize,
-                            lineHeight = titleSize * 1.1,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (courseIcon != null) {
+                                Icon(
+                                    imageVector = courseIcon,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier
+                                        .size((titleSize.value + 2).dp)
+                                        .padding(end = 4.dp)
+                                )
+                            }
+
+                            Text(
+                                text = event.title ?: "Cours",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = if (isZoomedOut) 1 else 3,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = titleSize,
+                                lineHeight = titleSize * 1.1,
+                            )
+                        }
 
                         if (event.type != null) {
                             Spacer(modifier = Modifier.width(4.dp))

@@ -20,6 +20,7 @@ import java.time.LocalDate
 import androidx.glance.appwidget.updateAll
 import com.example.polyspace.widget.TimetableWidget
 import android.content.Context
+import com.example.polyspace.utils.SymbolMapper
 
 class TimetableViewModel : ViewModel() {
 
@@ -61,6 +62,12 @@ class TimetableViewModel : ViewModel() {
     )
     private val eventsCache = mutableMapOf<LocalDate, List<PositionedEvent>>()
     private val fetchingDates = mutableSetOf<LocalDate>()
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    private val _courseIcons = MutableStateFlow<Map<String, androidx.compose.ui.graphics.vector.ImageVector>>(emptyMap())
+    val courseIcons: StateFlow<Map<String, androidx.compose.ui.graphics.vector.ImageVector>> = _courseIcons.asStateFlow()
 
     init {
         refreshSubjects()
@@ -134,9 +141,11 @@ class TimetableViewModel : ViewModel() {
         val currentDate = (uiState.value as? TimetableUiState.Success)?.date ?: LocalDate.now()
 
         viewModelScope.launch {
+            _isRefreshing.value = true
 
             fetchTimetableInternal(currentDate, forceRefresh = true)
 
+            _isRefreshing.value = false
         }
     }
 
@@ -160,6 +169,7 @@ class TimetableViewModel : ViewModel() {
 
             processEvents(date, networkEvents)
             updateKownSubjects(networkEvents)
+            loadMissingSymbols(networkEvents)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -240,6 +250,39 @@ class TimetableViewModel : ViewModel() {
                 TimetableWidget().updateAll(context)
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    private fun loadMissingSymbols(events: List<CourseEvent>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val uniqueTitles = events.mapNotNull { it.title }.filter { it.isNotBlank() }.distinct()
+            val currentIcons = _courseIcons.value.toMutableMap()
+            var mapUpdated = false
+
+            for (title in uniqueTitles) {
+                if (currentIcons.containsKey(title)) continue
+
+                var symbolId = Prefs.getCourseSymbol(title)
+
+                if (symbolId == null) {
+                    try {
+                        val response = NetworkModule.api.fetchSymbol(courseName = title)
+                        symbolId = response.symbolId ?: "book"
+                        android.util.Log.d("SymbolMapper", "Matière : $title -> SF Symbol reçu : $symbolId")
+                        Prefs.saveCourseSymbol(title, symbolId)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        symbolId = "book"
+                    }
+                }
+
+                currentIcons[title] = SymbolMapper.getMaterialIcon(courseName = title, sfSymbolId = symbolId)
+                mapUpdated = true
+            }
+
+            if (mapUpdated) {
+                _courseIcons.value = currentIcons
             }
         }
     }

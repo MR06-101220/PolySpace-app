@@ -87,4 +87,23 @@ object Prefs {
         prefs.edit().putBoolean(KEY_LIVE_ACTIVITIES, enabled).apply()
     }
 
+    // Stocking Courses Symbol
+    fun getCourseSymbol(courseName: String): String? {
+        return prefs.getString("symbol_$courseName", null)
+    }
+
+    fun saveCourseSymbol(courseName: String, symbolId: String) {
+        prefs.edit().putString("symbol_$courseName", symbolId).apply()
+    }
+
+    fun clearSymbolCache() {
+        val editor = prefs.edit()
+        prefs.all.keys.forEach { key ->
+            if (key.startsWith("symbol_")) {
+                editor.remove(key)
+            }
+        }
+        editor.apply()
+    }
+
 }

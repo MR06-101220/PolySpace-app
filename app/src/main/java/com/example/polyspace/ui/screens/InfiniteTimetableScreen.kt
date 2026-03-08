@@ -100,6 +100,7 @@ fun InfiniteTimetableScreen(
     var showDatePicker by remember { mutableStateOf(false) }
     val selectedEvent by viewModel.selectedEvent.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val courseIcons by viewModel.courseIcons.collectAsState()
 
     if (selectedEvent != null) {
         ModalBottomSheet(
@@ -218,7 +219,8 @@ fun InfiniteTimetableScreen(
                                     hourHeight = hourHeight,
                                     totalContentHeight = totalContentHeight,
                                     isScrollEnabled = isUserScrollEnabled,
-                                    isTodayVisible = isTodayVisible
+                                    isTodayVisible = isTodayVisible,
+                                    courseIcons = courseIcons
                                 )
                             }
                         }
