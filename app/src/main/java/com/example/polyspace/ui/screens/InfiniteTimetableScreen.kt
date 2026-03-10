@@ -101,6 +101,7 @@ fun InfiniteTimetableScreen(
     val selectedEvent by viewModel.selectedEvent.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val courseIcons by viewModel.courseIcons.collectAsState()
+    var showExportScreen by remember { mutableStateOf(false) }
 
     if (selectedEvent != null) {
         ModalBottomSheet(
@@ -134,6 +135,18 @@ fun InfiniteTimetableScreen(
         )
     }
 
+    if (showExportScreen) {
+        val exportViewModel: com.example.polyspace.ui.features.export.ExportViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
+        com.example.polyspace.ui.features.export.ExportScreen(
+            viewModel = exportViewModel,
+            onBack = {
+                exportViewModel.reset()
+                showExportScreen = false }
+        )
+        return
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -157,7 +170,10 @@ fun InfiniteTimetableScreen(
                     onDismissMenu = { showViewMenu = false },
                     targetDaysVisible = targetDaysVisible,
                     onViewOptionSelected = { targetDaysVisible = it },
-                    onRefreshClick = { viewModel.manualRefresh() }
+                    onRefreshClick = { viewModel.manualRefresh() },
+                    onExportClick = {
+                        showViewMenu = false
+                        showExportScreen = true }
                 )
 
                 Divider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f), thickness = 1.dp)

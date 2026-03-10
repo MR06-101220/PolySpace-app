@@ -15,15 +15,14 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ViewWeek
+import androidx.compose.material.icons.filled.PictureAsPdf // 🚀 Nouvel import
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -42,7 +41,8 @@ fun TimetableHeader(
     onDismissMenu: () -> Unit,
     targetDaysVisible: Float,
     onViewOptionSelected: (Float) -> Unit,
-    onRefreshClick: () -> Unit
+    onRefreshClick: () -> Unit,
+    onExportClick: () -> Unit // 🚀 NOUVEAU PARAMÈTRE
 ) {
     Row(
         modifier = Modifier
@@ -108,6 +108,7 @@ fun TimetableHeader(
                                 color = MaterialTheme.colorScheme.outlineVariant
                             )
 
+                            // Bouton Actualiser
                             DropdownMenuItem(
                                 text = {
                                     Text(
@@ -126,6 +127,29 @@ fun TimetableHeader(
                                 },
                                 onClick = {
                                     onRefreshClick()
+                                    closeMenu()
+                                },
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp)
+                            )
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        "Exporter (PDF)",
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Default.PictureAsPdf,
+                                        null,
+                                        tint = MaterialTheme.colorScheme.onSurface,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                },
+                                onClick = {
+                                    onExportClick()
                                     closeMenu()
                                 },
                                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp)

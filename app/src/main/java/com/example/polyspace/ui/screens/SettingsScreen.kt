@@ -95,7 +95,7 @@ fun SettingsScreen(
             SettingsTile(
                 icon = Icons.Outlined.Info,
                 title = "À propos",
-                subtitle = "Version 2.8.7 • Développé par MR06",
+                subtitle = "Version 3.0 • Développé par MR06",
                 onClick = { showAboutDialog = true }
             )
 
