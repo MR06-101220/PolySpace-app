@@ -15,7 +15,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ViewWeek
-import androidx.compose.material.icons.filled.PictureAsPdf // 🚀 Nouvel import
+import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -42,7 +42,7 @@ fun TimetableHeader(
     targetDaysVisible: Float,
     onViewOptionSelected: (Float) -> Unit,
     onRefreshClick: () -> Unit,
-    onExportClick: () -> Unit // 🚀 NOUVEAU PARAMÈTRE
+    onExportClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
