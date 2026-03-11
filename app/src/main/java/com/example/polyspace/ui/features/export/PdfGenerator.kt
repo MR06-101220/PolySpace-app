@@ -33,7 +33,7 @@ object PdfGenerator {
         val bgPaint = Paint().apply { color = Color.WHITE }
         val linePaint = Paint().apply { color = Color.parseColor("#E0E0E0"); strokeWidth = 4f }
         val textPaint = Paint().apply { color = Color.BLACK; textSize = 45f; typeface = Typeface.DEFAULT_BOLD }
-        val timePaint = Paint().apply { color = Color.BALCK; textSize = 35f; textAlign = Paint.Align.RIGHT }
+        val timePaint = Paint().apply { color = Color.BLACK; textSize = 35f; textAlign = Paint.Align.RIGHT }
 
         val headerPaint = Paint().apply { color = Color.BLACK; textSize = 60f; typeface = Typeface.DEFAULT_BOLD; textAlign = Paint.Align.LEFT }
 
