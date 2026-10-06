@@ -10,17 +10,17 @@ plugins {
 }
 
 android {
-    namespace = "com.example.polyspace"
+    namespace = "com.polyspace.app"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.polyspace"
+        applicationId = "com.polyspace.app"
         minSdk = 28
         targetSdk = 36
         versionCode = 2
-        versionName = "3.0"
+        versionName = "3.2"
 
         val properties = Properties()
         val propertiesFile = project.rootProject.file("local.properties")

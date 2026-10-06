@@ -1,4 +1,4 @@
-package com.example.polyspace
+package com.polyspace.app
 
 import org.junit.Test
 
